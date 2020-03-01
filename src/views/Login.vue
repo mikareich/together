@@ -1,7 +1,7 @@
 <template>
   <form class="login">
     <img src="../assets/login.png" width="200" alt="" />
-    <p>Let's log in to together</p>
+    <p>Let's log in to find together</p>
     <input type="email" placeholder="Email" v-model="email" required />
     <br />
     <input type="password" placeholder="Password" v-model="password" required />
@@ -41,21 +41,11 @@ export default {
 };
 </script>
 <style scoped>
-input {
-  margin: 10px 0px;
-  padding: 15px;
-  border: 1px solid lightgray;
-  border-radius: 2px;
+.login{
+  text-align: center;
+
 }
-button {
-  margin-top: 10px;
-  cursor: pointer;
-  border-radius: 2px;
-  border: none;
-  padding: 10px 20px;
-  color: white;
-  background-color: #ac2b2b;
-}
+
 span {
   display: block;
   margin-top: 20px;
