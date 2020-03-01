@@ -63,16 +63,17 @@ export default {
           .update(postData, err => console.log(err));
         this.currentMessage = "";
       }
-    },
-    loadPosts() {
-      let posts = firebase.database().ref("posts");
-      posts.on("value", msg => {
-        this.allPosts = Object.values(msg.val());
-      });
     }
   },
   created() {
-    this.loadPosts();
+    let currentTimestamp = new Date().getTime();
+
+    let posts = firebase.database().ref("posts");
+    posts.on("value", msg => {
+      this.allPosts = Object.values(msg.val()).filter(
+        msg => msg.timestamp >= currentTimestamp
+      );
+    });
   }
 };
 </script>
@@ -80,6 +81,9 @@ export default {
 .home {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 h1 {
   margin-top: 0px;
@@ -89,6 +93,23 @@ header {
 }
 .posts {
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
+}
+.post {
+  background-color: #e68383;
+  margin-top: 10px;
+  border-radius: 5px 5px 5px 0px;
+  padding: 10px;
+  max-width: 200px;
+  width: fit-content;
+}
+.post.me {
+  align-self: flex-end;
+  border-radius: 5px 5px 0px 5px;
+  background-color: #ac2b2b31;
 }
 button {
   margin-top: 10px;
@@ -121,8 +142,6 @@ button:active {
   background-color: #ac2b2b80;
 }
 form.messageContainer {
-  position: absolute;
-  bottom: 0;
   display: flex;
   justify-content: space-between;
   padding: 0px 5px;
@@ -131,28 +150,5 @@ form.messageContainer {
 .messageContainer input {
   width: 100%;
   margin-right: 5px;
-}
-.posts {
-  display: flex;
-  flex-direction: column;
-}
-.post {
-  background-color: #e68383;
-  margin-top: 10px;
-  border-radius: 5px 5px 5px 0px;
-  padding: 5px;
-  width: min-content;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 200px;
-}
-.post:nth-child(odd) {
-  background-color: #ac2b2ba9;
-}
-.post.me {
-  align-self: flex-end;
-  border-radius: 5px 5px 0px 5px;
-  background-color: #ac2b2b31;
 }
 </style>
