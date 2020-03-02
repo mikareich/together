@@ -3,6 +3,8 @@
     <img src="../assets/login.png" width="200" alt="" />
 
     <p>Let's sign up to find together</p>
+    <input type="text" placeholder="Username" v-model="username" required />
+    <br />
     <input type="email" placeholder="Email" v-model="email" required />
     <br />
     <input type="password" placeholder="Password" v-model="password" required />
@@ -25,6 +27,7 @@ export default {
     return {
       email: "",
       password: "",
+      username: "",
       err: false
     };
   },
@@ -34,7 +37,16 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
-          user => this.$router.replace("/home"),
+          user => {
+            firebase
+              .database()
+              .ref(`user/${user.user.uid}`)
+              .update({
+                username: this.username,
+                email: this.email
+              });
+            this.$router.replace("/home");
+          },
           err => (this.err = true)
         );
     }
@@ -43,7 +55,9 @@ export default {
 </script>
 <style scoped>
 .sign-up {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 span {

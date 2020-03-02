@@ -41,9 +41,10 @@ export default {
 };
 </script>
 <style scoped>
-.login{
-  text-align: center;
-
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 span {

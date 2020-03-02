@@ -3,17 +3,18 @@
     <header>
       <h1>Togehter</h1>
       <h4>. find together . change together</h4>
+      <p>Signd in as {{ user.username }}</p>
     </header>
     <div class="posts">
       <div
         v-for="(post, i) in allPosts"
         :key="i"
         class="post"
-        :class="{ me: post.uid === uid }"
+        :class="{ me: post.user.uid === user.uid }"
       >
-        {{ post.message }}
+        <span class="message">{{ post.message }}</span>
+        <span class="info">{{ post.user.username }}</span>
       </div>
-      <i v-show="allPosts.length === 0">Write the first post...</i>
     </div>
     <form class="messageContainer">
       <input type="text" placeholder="Write post..." v-model="currentMessage" />
@@ -21,7 +22,7 @@
         <i class="material-icons">send</i>
       </button>
     </form>
-    <br />
+    <a @click="logout()">Log out</a>
   </div>
 </template>
 
@@ -32,8 +33,11 @@ export default {
   name: "Home",
   data() {
     return {
-      email: firebase.auth().currentUser.email,
-      uid: firebase.auth().currentUser.uid,
+      user: {
+        email: "null",
+        username: "null",
+        uid: firebase.auth().currentUser.uid
+      },
       currentMessage: "",
       allPosts: []
     };
@@ -47,33 +51,55 @@ export default {
     },
     send() {
       if (this.currentMessage !== "") {
-        let postData = {
-          uid: this.uid,
-          message: this.currentMessage,
-          timestamp: new Date().getTime()
-        };
         let key = firebase
           .database()
           .ref()
           .child("post")
           .push().key;
+
+        let postData = {
+          message: this.currentMessage,
+          timestamp: new Date().getTime(),
+          user: this.user,
+          key: key
+        };
+        
+        // send to post
         firebase
           .database()
           .ref(`posts/${key}`)
-          .update(postData, err => console.log(err));
+          .update(postData);
+        // send to user
+        firebase
+          .database()
+          .ref(`user/${this.user.uid}/posts`)
+          .update({
+            message: postData.message,
+            key: postData.key,
+            timestamp: postData.timestamp
+          });
         this.currentMessage = "";
       }
     }
   },
   created() {
+    // load posts
     let currentTimestamp = new Date().getTime();
 
     let posts = firebase.database().ref("posts");
     posts.on("value", msg => {
       this.allPosts = Object.values(msg.val()).filter(
-        msg => msg.timestamp >= currentTimestamp
+        msg => msg.timestamp != currentTimestamp
       );
     });
+    firebase
+      .database()
+      .ref(`user/${this.user.uid}`)
+      .once("value")
+      .then(user => {
+        this.user.username = user.val().username;
+        this.user.email = user.val().email;
+      });
   }
 };
 </script>
@@ -90,6 +116,9 @@ h1 {
 }
 header {
   padding: 5px;
+}
+a {
+  text-align: center;
 }
 .posts {
   padding: 5px;
