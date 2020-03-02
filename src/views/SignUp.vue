@@ -43,7 +43,8 @@ export default {
               .ref(`user/${user.user.uid}`)
               .update({
                 username: this.username,
-                email: this.email
+                email: this.email,
+                posts: []
               });
             this.$router.replace("/home");
           },
