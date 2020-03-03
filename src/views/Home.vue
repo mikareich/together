@@ -3,17 +3,19 @@
     <header>
       <h1>Togehter</h1>
       <h4>. find together . change together</h4>
-      <p>Signd in as {{ user.username }}</p>
+      <p>Signd in as {{ user.displayName }}</p>
     </header>
     <div class="posts">
       <div
         v-for="(post, i) in allPosts"
         :key="i"
         class="post"
-        :class="{ me: post.user.uid === user.uid }"
+        :class="{ me: post.user.uid !== user.uid }"
       >
-        <span class="message">{{ post.message }}</span>
-        <span class="info">{{ post.user.username }}</span>
+        <span class="username" v-show="post.user.uid === user.uid"
+          >[ {{ post.user.username }}]:
+        </span>
+        <span class="message"> {{ post.message }}</span>
       </div>
     </div>
     <form class="messageContainer">
@@ -33,11 +35,7 @@ export default {
   name: "Home",
   data() {
     return {
-      user: {
-        email: "null",
-        username: "null",
-        uid: firebase.auth().currentUser.uid
-      },
+      user: firebase.auth().currentUser,
       currentMessage: "",
       allPosts: []
     };
@@ -60,24 +58,15 @@ export default {
         let postData = {
           message: this.currentMessage,
           timestamp: new Date().getTime(),
-          user: this.user,
+          user: { username: this.user.displayName, uid: this.user.uid },
           key: key
         };
-        
+
         // send to post
         firebase
           .database()
           .ref(`posts/${key}`)
           .update(postData);
-        // send to user
-        firebase
-          .database()
-          .ref(`user/${this.user.uid}/posts`)
-          .update({
-            message: postData.message,
-            key: postData.key,
-            timestamp: postData.timestamp
-          });
         this.currentMessage = "";
       }
     }
@@ -92,14 +81,6 @@ export default {
         msg => msg.timestamp != currentTimestamp
       );
     });
-    firebase
-      .database()
-      .ref(`user/${this.user.uid}`)
-      .once("value")
-      .then(user => {
-        this.user.username = user.val().username;
-        this.user.email = user.val().email;
-      });
   }
 };
 </script>
@@ -128,18 +109,29 @@ a {
   overflow-y: scroll;
 }
 .post {
-  background-color: #e68383;
+  border: 2px solid #8395e6;
   margin-top: 10px;
-  border-radius: 5px 5px 5px 0px;
   padding: 10px;
-  max-width: 200px;
+  max-width: 250px;
   width: fit-content;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  position: relative;
+  font-size: 13pt;
+  border-radius: 5px;
+}
+.post .username {
+  font-weight: bold;
+  color: #1359c3;
 }
 .post.me {
   align-self: flex-end;
   border-radius: 5px 5px 0px 5px;
-  background-color: #ac2b2b31;
+  background-color: #5c6bf057;
+  border-radius: 0.4em;
 }
+
 button {
   margin-top: 10px;
   cursor: pointer;
@@ -147,7 +139,7 @@ button {
   border: none;
   padding: 0px 20px;
   color: white;
-  background-color: #ac2b2b;
+  background-color: #342bac;
   border-radius: 3px;
   border: 1px solid transparent;
   height: 37px;
@@ -164,8 +156,8 @@ input {
 input:focus,
 button:focus,
 button:active {
-  outline: #ab2b2b80 solid 1px;
-  border: #ac2b2b solid 1px;
+  outline: #2b54ab80 solid 1px;
+  border: #342bac solid 1px;
 }
 button:active {
   background-color: #ac2b2b80;

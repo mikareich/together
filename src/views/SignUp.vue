@@ -38,14 +38,10 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
-            firebase
-              .database()
-              .ref(`user/${user.user.uid}`)
-              .update({
-                username: this.username,
-                email: this.email,
-                posts: []
-              });
+            firebase.auth().currentUser.updateProfile({
+              displayName: this.username
+            });
+
             this.$router.replace("/home");
           },
           err => (this.err = true)
