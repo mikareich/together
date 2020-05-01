@@ -60,6 +60,8 @@
 
 <script>
 import firebase from 'firebase'
+import { email, password, required } from './registrationRules'
+
 export default {
   data() {
     return {
@@ -71,14 +73,9 @@ export default {
       snackbarText: null,
       openSnackbar: false,
       rules: {
-        required: v => !!v || 'This field is required',
-        email: v =>
-          /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
-            v
-          ) || 'Email must be valid',
-        password: v =>
-          /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(v) ||
-          'Password must contain at least one digit, one upper-, one lower case and eight characters'
+        required,
+        email,
+        password
       }
     }
   },
@@ -116,5 +113,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped></style>
