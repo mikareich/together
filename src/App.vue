@@ -69,7 +69,7 @@
       </template>
     </v-navigation-drawer>
     <v-content>
-      <router-view class="pa-2" @snackbar="openSnackbar"></router-view>
+      <router-view class="pa-2"></router-view>
     </v-content>
   </v-app>
 </template>
@@ -91,9 +91,6 @@ export default {
         .auth()
         .signOut()
         .then(() => this.$router.push('/signIn'))
-    },
-    openSnackbar(title, content) {
-      console.log(title, content)
     }
   }
 }

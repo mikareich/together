@@ -9,7 +9,7 @@
       Sign in to enjoy the benefits of being together.
     </v-banner>
 
-    <v-form class="mt-2" v-model="valid">
+    <v-form class="mt-2" v-model="valid" ref="form">
       <v-text-field
         filled
         label="Email"
@@ -65,6 +65,8 @@ export default {
   },
   methods: {
     signUp() {
+      this.$refs.form.validate()
+
       if (this.valid) {
         firebase
           .auth()
@@ -82,8 +84,7 @@ export default {
       }
     },
     reset() {
-      this.email = null
-      this.password = null
+      this.$refs.form.reset()
     }
   }
 }

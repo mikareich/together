@@ -8,7 +8,7 @@
       </v-avatar>
       What you write here can read by everyone with valid account.
     </v-banner>
-    <v-form class="mt-2" v-model="valid">
+    <v-form class="mt-2" v-model="valid" ref="form">
       <v-text-field
         label="Title"
         filled
@@ -45,6 +45,13 @@
       <span>Send</span>
       <v-icon right>send</v-icon>
     </v-btn>
+    <v-snackbar
+      v-model="openSnackbar"
+      :timeout="5000"
+      @click="openSnackbar = false"
+    >
+      {{ snackbarText }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -63,12 +70,15 @@ export default {
         required,
         max20,
         max200
-      }
+      },
+      openSnackbar: false,
+      snackbarText: null
     }
   },
   computed: mapState(['user']),
   methods: {
     send() {
+      this.$refs.form.validate()
       if (this.valid) {
         this.loadMessage = true
         const postData = {
@@ -93,8 +103,15 @@ export default {
           .set(postData)
           .then(() => {
             this.loadMessage = false
+            this.snackbarText = 'Post sent'
+            this.openSnackbar = true
+            this.$refs.form.reset()
           })
-        this.$emit('snackbar', 'tst', 'ctn')
+          .catch(err => {
+            this.loadMessage = false
+            this.snackbarText = err.message
+            this.openSnackbar = true
+          })
       }
     }
   }
