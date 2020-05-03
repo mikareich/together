@@ -22,7 +22,8 @@ firebase.initializeApp(firebaseConfig)
 Vue.config.productionTip = false
 
 firebase.auth().onAuthStateChanged(() => {
-  store.commit('SET_USER', firebase.auth().currentUser)
+  if (firebase.auth().currentUser)
+    store.commit('SET_USER', firebase.auth().currentUser)
   new Vue({
     router,
     store,

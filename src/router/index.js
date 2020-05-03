@@ -7,16 +7,17 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'Home',
     component: Home,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      displayName: 'Home'
     }
   },
   {
     path: '*',
-    redirect: '/'
+    redirect: '/home'
   },
   {
     path: '/about',
@@ -24,12 +25,12 @@ const routes = [
     component: () => import('../views/About.vue')
   },
   {
-    path: '/signin',
+    path: '/signIn',
     name: 'SignIn',
     component: () => import('../views/SignIn.vue')
   },
   {
-    path: '/signup',
+    path: '/signUp',
     name: 'SignUp',
     component: () => import('../views/SignUp.vue')
   },
@@ -38,16 +39,44 @@ const routes = [
     name: 'Settings',
     component: () => import('../views/Settings.vue'),
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      displayName: 'Settings'
     }
   },
   {
     path: '/account/:id',
     name: 'Account',
     component: () => import('../views/Account.vue'),
-    props: true,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      displayName: 'Account'
+    }
+  },
+  {
+    path: '/posts/:id',
+    name: 'Post',
+    component: () => import('../views/Post.vue'),
+    meta: {
+      requiresAuth: true,
+      displayName: 'Post'
+    }
+  },
+  {
+    path: '/markedPosts',
+    name: 'MarkedPosts',
+    component: () => import('../views/MarkedPosts.vue'),
+    meta: {
+      requiresAuth: true,
+      displayName: 'Marked posts'
+    }
+  },
+  {
+    path: '/writePost',
+    name: 'WritePost',
+    component: () => import('../views/Settings.vue'),
+    meta: {
+      requiresAuth: true,
+      displayName: 'Write Post'
     }
   }
 ]
@@ -61,8 +90,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const currentUser = firebase.auth().currentUser
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-
-  console.log(currentUser)
 
   if (currentUser && !requiresAuth) next('/')
   else if (!currentUser && requiresAuth) next('/signin')
