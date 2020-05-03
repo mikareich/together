@@ -84,7 +84,8 @@ export default {
         const postData = {
           author: {
             username: this.user.username,
-            uid: this.user.uid
+            uid: this.user.uid,
+            photoURL: this.user.photoURL
           },
           post: {
             message: this.post,
