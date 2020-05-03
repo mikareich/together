@@ -24,6 +24,7 @@ Vue.config.productionTip = false
 firebase.auth().onAuthStateChanged(() => {
   if (firebase.auth().currentUser)
     store.commit('SET_USER', firebase.auth().currentUser)
+  store.dispatch('listenOnPosts')
   new Vue({
     router,
     store,

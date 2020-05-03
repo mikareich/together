@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -10,7 +11,8 @@ export default new Vuex.Store({
       email: null,
       uid: null,
       photoURL: null
-    }
+    },
+    posts: []
   },
   mutations: {
     SET_USER(state, { displayName, email, uid, photoURL }) {
@@ -20,8 +22,21 @@ export default new Vuex.Store({
         uid,
         photoURL
       }
+    },
+    UPDATE_POSTS(state, posts) {
+      state.posts = posts
     }
   },
-  actions: {},
+  actions: {
+    listenOnPosts({ commit }) {
+      console.log('Hey, I am listening')
+      firebase
+        .database()
+        .ref('/posts/')
+        .on('value', function(snapshot) {
+          commit('UPDATE_POSTS', snapshot.toJSON())
+        })
+    }
+  },
   modules: {}
 })

@@ -17,7 +17,7 @@
         <v-icon>search</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer fixed v-model="drawer" absolute temporary>
       <v-list-item>
         <v-list-item-avatar>
           <v-img :src="user.photoURL || ''"></v-img>

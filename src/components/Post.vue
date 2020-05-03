@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card outlined>
+    <v-card outlined class="card">
       <v-list-item>
         <v-list-item-avatar>
           <v-img :src="post.author.photoURL"></v-img>
@@ -9,17 +9,22 @@
         <v-list-item-content>
           <v-list-item-title>{{ post.post.title }}</v-list-item-title>
           <v-list-item-subtitle
-            >by {{ post.author.username }}</v-list-item-subtitle
-          >
+            >by
+            <a :href="`/account/${post.author.uid}`">{{
+              post.author.username
+            }}</a>
+          </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-card-text>
+      <v-card-text class="body-2">
         {{ post.post.message }}
       </v-card-text>
       <v-card-actions>
-        <v-btn rounded text color="primary">
-          Mark
-          <v-icon right>bookmark_border</v-icon>
+        <v-btn icon color="primary">
+          <v-icon>bookmark_border</v-icon>
+        </v-btn>
+        <v-btn icon color="primary">
+          <v-icon>reply</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn
@@ -43,10 +48,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text-truncation--multi {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+.card {
+  border-radius: 5px !important;
+}
+.card:active {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.185) !important;
 }
 </style>

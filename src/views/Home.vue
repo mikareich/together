@@ -1,19 +1,10 @@
 <template>
   <div class="home">
     <Post
-      :post="{
-        author: {
-          photoURL: 'https://api.adorable.io/avatars/285/Mika Reich.png',
-          uid: '2xnLOjeQmMOxHjpkgyvtg9Sbkrq2',
-          username: 'Mika Reich'
-        },
-        post: {
-          message: 'YAY!!! This is my first post 🎉🎉🎉',
-          title: 'First Post',
-          posts: 0
-        },
-        timestamp: 1588502969290
-      }"
+      v-for="(postKey, i) in posts"
+      :key="i"
+      :post="posts[i]"
+      class="ma-2"
     ></Post>
   </div>
 </template>
@@ -21,8 +12,10 @@
 <script>
 // @ is an alias to /src
 import Post from '@/components/Post.vue'
+import { mapState } from 'vuex'
 export default {
   name: 'Home',
-  components: { Post }
+  components: { Post },
+  computed: mapState(['posts'])
 }
 </script>
