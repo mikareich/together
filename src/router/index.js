@@ -73,7 +73,7 @@ const routes = [
   {
     path: '/writePost',
     name: 'WritePost',
-    component: () => import('../views/Settings.vue'),
+    component: () => import('../views/WritePost.vue'),
     meta: {
       requiresAuth: true,
       displayName: 'Write Post'
