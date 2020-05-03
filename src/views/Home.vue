@@ -9,7 +9,8 @@
         },
         post: {
           message: 'YAY!!! This is my first post 🎉🎉🎉',
-          title: 'First Post'
+          title: 'First Post',
+          posts: 0
         },
         timestamp: 1588502969290
       }"

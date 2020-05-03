@@ -89,7 +89,8 @@ export default {
           },
           post: {
             message: this.post,
-            title: this.title
+            title: this.title,
+            likes: 0
           },
           timestamp: new Date().getTime()
         }

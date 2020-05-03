@@ -3,24 +3,24 @@
     <v-card outlined>
       <v-list-item>
         <v-list-item-avatar>
-          <v-img
-            src="https://api.adorable.io/avatars/285/Mika Reich.png"
-          ></v-img>
+          <v-img :src="post.author.photoURL"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>Post XY</v-list-item-title>
-          <v-list-item-subtitle>Mika Reich</v-list-item-subtitle>
+          <v-list-item-title>{{ post.post.title }}</v-list-item-title>
+          <v-list-item-subtitle
+            >by {{ post.author.username }}</v-list-item-subtitle
+          >
         </v-list-item-content>
       </v-list-item>
-      <v-card-text class="d-inline-block text-truncate">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo
-        laborum perferendis optio. Iusto molestiae rem, est deserunt quia
-        corporis ut asperiores magnam temporibus voluptatem cum consequuntur
-        aspernatur perferendis nobis sed.
+      <v-card-text>
+        {{ post.post.message }}
       </v-card-text>
       <v-card-actions>
-        <v-btn text>Read more</v-btn>
+        <v-btn rounded text color="primary">
+          Mark
+          <v-icon right>bookmark_border</v-icon>
+        </v-btn>
         <v-spacer></v-spacer>
         <v-btn
           text
@@ -37,7 +37,9 @@
 </template>
 
 <script>
-export default {}
+export default {
+  props: ['post']
+}
 </script>
 
 <style lang="scss" scoped>
