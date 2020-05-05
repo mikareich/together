@@ -12,7 +12,9 @@ const routes = [
     component: Home,
     meta: {
       requiresAuth: true,
-      displayName: 'Home'
+      displayName: 'Home',
+      displayOnDrawer: true,
+      icon: 'dashboard'
     }
   },
   {
@@ -40,7 +42,9 @@ const routes = [
     component: () => import('../views/Settings.vue'),
     meta: {
       requiresAuth: true,
-      displayName: 'Settings'
+      displayName: 'Settings',
+      displayOnDrawer: true,
+      icon: 'settings'
     }
   },
   {
@@ -67,7 +71,9 @@ const routes = [
     component: () => import('../views/MarkedPosts.vue'),
     meta: {
       requiresAuth: true,
-      displayName: 'Marked posts'
+      displayName: 'Marked posts',
+      displayOnDrawer: true,
+      icon: 'bookmark'
     }
   },
   {
@@ -95,5 +101,5 @@ router.beforeEach((to, from, next) => {
   else if (!currentUser && requiresAuth) next('/signin')
   else next()
 })
-
+export { routes }
 export default router

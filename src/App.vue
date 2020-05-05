@@ -17,7 +17,7 @@
         <v-icon>search</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer fixed v-model="drawer" absolute temporary>
+    <v-navigation-drawer fixed v-model="drawer" temporary>
       <v-list-item>
         <v-list-item-avatar>
           <v-img :src="user.photoURL || ''"></v-img>
@@ -29,36 +29,16 @@
         </v-list-item-content> </v-list-item
       ><v-divider></v-divider>
       <v-list nav dense>
-        <v-list-item link :to="{ name: 'Home' }"
+        <v-list-item
+          link
+          v-for="(route, i) in routesForDrawer"
+          :key="i"
+          :to="{ name: route.name }"
           ><v-list-item-icon>
-            <v-icon>dashboard</v-icon>
+            <v-icon>{{ route.meta.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content></v-list-item
-        >
-        <v-list-item link :to="{ name: 'WritePost' }"
-          ><v-list-item-icon>
-            <v-icon>create</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Write post</v-list-item-title>
-          </v-list-item-content></v-list-item
-        >
-        <v-list-item link :to="{ name: 'MarkedPosts' }"
-          ><v-list-item-icon>
-            <v-icon>bookmark</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Marked posts</v-list-item-title>
-          </v-list-item-content></v-list-item
-        >
-        <v-list-item link :to="{ name: 'Settings' }"
-          ><v-list-item-icon>
-            <v-icon>settings</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Settings</v-list-item-title>
+            <v-list-item-title>{{ route.meta.displayName }}</v-list-item-title>
           </v-list-item-content></v-list-item
         >
       </v-list>
@@ -77,12 +57,19 @@
 <script>
 import { mapState } from 'vuex'
 import firebase from 'firebase'
+import { routes } from '@/router/index'
+
 export default {
   name: 'App',
-  computed: mapState(['user']),
+  computed: {
+    ...mapState(['user'])
+  },
   data() {
     return {
-      drawer: false
+      drawer: false,
+      routesForDrawer: routes.filter(route =>
+        route.meta ? route.meta.displayOnDrawer : false
+      )
     }
   },
   methods: {
