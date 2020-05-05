@@ -48,8 +48,14 @@
         </div>
       </template>
     </v-navigation-drawer>
-    <v-content>
-      <router-view class="pa-2"></router-view>
+    <v-content
+      ><v-snackbar v-model="snackbarStatus">
+        {{ snackbarText }}
+        <v-btn color="secondary" right text @click="snackbarStatus = false">
+          Close
+        </v-btn>
+      </v-snackbar>
+      <router-view class="pa-2" @snackbar="snackbar">Dismiss</router-view>
     </v-content>
   </v-app>
 </template>
@@ -69,7 +75,9 @@ export default {
       drawer: false,
       routesForDrawer: routes.filter(route =>
         route.meta ? route.meta.displayOnDrawer : false
-      )
+      ),
+      snackbarStatus: false,
+      snackbarText: ''
     }
   },
   methods: {
@@ -78,6 +86,10 @@ export default {
         .auth()
         .signOut()
         .then(() => this.$router.push('/signIn'))
+    },
+    snackbar(text) {
+      this.snackbarStatus = true
+      this.snackbarText = text
     }
   }
 }

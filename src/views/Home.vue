@@ -16,6 +16,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Home',
   components: { Post },
-  computed: mapState(['posts'])
+  computed: mapState(['posts']),
+  created() {}
 }
 </script>

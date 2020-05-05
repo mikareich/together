@@ -35,13 +35,6 @@
     <p class="overline text-center mt-3">
       You don't have an account ? <a href="/signup">Click here</a> to sign up.
     </p>
-    <v-snackbar
-      v-model="openSnackbar"
-      :timeout="5000"
-      @click="openSnackbar = false"
-    >
-      {{ snackbarText }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -55,8 +48,6 @@ export default {
       password: null,
       valid: false,
       showPassword: false,
-      snackbarText: null,
-      openSnackbar: false,
       rules: {
         email,
         password
@@ -71,16 +62,15 @@ export default {
         firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
-          .then(() => {
+          .then(({ user }) => {
+            this.$emit('snackbar', `Welcome ${user.displayName}`)
             this.$router.push('/')
           })
           .catch(err => {
-            this.snackbarText = err.message
-            this.openSnackbar = true
+            this.$emit('snackbar', err.message)
           })
       } else {
-        this.snackbarText = 'Please check your entries.'
-        this.openSnackbar = true
+        this.$emit('snackbar', 'Please check your entries')
       }
     },
     reset() {

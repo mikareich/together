@@ -48,13 +48,6 @@
     <p class="overline text-center mt-3">
       Already have an account ? <a href="/signin">Click here</a> to sign in.
     </p>
-    <v-snackbar
-      v-model="openSnackbar"
-      :timeout="5000"
-      @click="openSnackbar = false"
-    >
-      {{ snackbarText }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -70,8 +63,6 @@ export default {
       password: null,
       valid: false,
       showPassword: false,
-      snackbarText: null,
-      openSnackbar: false,
       rules: {
         required,
         email,
@@ -92,14 +83,17 @@ export default {
               displayName: this.username,
               photoURL: this.profilePhoto
             })
+            this.$emit(
+              'snackbar',
+
+              `Welcome ${userCredential.user.displayName}`
+            )
           })
           .catch(err => {
-            this.snackbarText = err.message
-            this.openSnackbar = true
+            this.$emit('snackbar', err.message)
           })
       } else {
-        this.snackbarText = 'Please check your entries.'
-        this.openSnackbar = true
+        this.$emit('snackbar', 'Please check your entries')
       }
     },
     reset() {

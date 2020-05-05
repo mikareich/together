@@ -45,13 +45,6 @@
       <span>Send</span>
       <v-icon right>send</v-icon>
     </v-btn>
-    <v-snackbar
-      v-model="openSnackbar"
-      :timeout="5000"
-      @click="openSnackbar = false"
-    >
-      {{ snackbarText }}
-    </v-snackbar>
   </div>
 </template>
 
@@ -70,9 +63,7 @@ export default {
         required,
         max20,
         max200
-      },
-      openSnackbar: false,
-      snackbarText: null
+      }
     }
   },
   computed: mapState(['user']),
@@ -105,14 +96,12 @@ export default {
           .set(postData)
           .then(() => {
             this.loadMessage = false
-            this.snackbarText = 'Post sent'
-            this.openSnackbar = true
+            this.$emit('snackbar', 'Post sent')
             this.$refs.form.reset()
           })
           .catch(err => {
             this.loadMessage = false
-            this.snackbarText = err.message
-            this.openSnackbar = true
+            this.$emit('snackbar', err.message)
           })
       }
     }
