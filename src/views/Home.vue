@@ -3,9 +3,21 @@
     <Post
       v-for="(postKey, i) in posts"
       :key="i"
-      :post="posts[i]"
+      :post="posts[i].post"
+      :author="posts[i].author"
       class="ma-2"
     ></Post>
+    <v-btn
+      fixed
+      fab
+      bottom
+      right
+      color="primary"
+      link
+      :to="{ name: 'WritePost' }"
+    >
+      <v-icon large="">add</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -16,7 +28,6 @@ import { mapState } from 'vuex'
 export default {
   name: 'Home',
   components: { Post },
-  computed: mapState(['posts']),
-  created() {}
+  computed: mapState(['posts'])
 }
 </script>

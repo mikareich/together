@@ -52,6 +52,7 @@
 import { required, max20, max200 } from './registrationRules'
 import firebase from 'firebase'
 import { mapState } from 'vuex'
+import EventBus from './event-bus'
 export default {
   data() {
     return {
@@ -96,12 +97,12 @@ export default {
           .set(postData)
           .then(() => {
             this.loadMessage = false
-            this.$emit('snackbar', 'Post sent')
-            this.$refs.form.reset()
+            EventBus.$emit('snackbar', 'Post sent')
+            this.$router.push('/home')
           })
           .catch(err => {
             this.loadMessage = false
-            this.$emit('snackbar', err.message)
+            EventBus.$emit('snackbar', err.message)
           })
       }
     }

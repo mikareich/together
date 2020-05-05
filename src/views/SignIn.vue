@@ -41,6 +41,7 @@
 <script>
 import firebase from 'firebase'
 import { email, password } from './registrationRules'
+import EventBus from './event-bus'
 export default {
   data() {
     return {
@@ -63,14 +64,14 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then(({ user }) => {
-            this.$emit('snackbar', `Welcome ${user.displayName}`)
+            EventBus.$emit('snackbar', `Welcome ${user.displayName}`)
             this.$router.push('/')
           })
           .catch(err => {
-            this.$emit('snackbar', err.message)
+            EventBus.$emit('snackbar', err.message)
           })
       } else {
-        this.$emit('snackbar', 'Please check your entries')
+        EventBus.$emit('snackbar', 'Please check your entries')
       }
     },
     reset() {

@@ -64,6 +64,7 @@
 import { mapState } from 'vuex'
 import firebase from 'firebase'
 import { routes } from '@/router/index'
+import EventBus from './views/event-bus'
 
 export default {
   name: 'App',
@@ -91,6 +92,9 @@ export default {
       this.snackbarStatus = true
       this.snackbarText = text
     }
+  },
+  mounted() {
+    EventBus.$on('snackbar', this.snackbar)
   }
 }
 </script>

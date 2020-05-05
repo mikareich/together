@@ -54,6 +54,7 @@
 <script>
 import firebase from 'firebase'
 import { email, password, required } from './registrationRules'
+import EventBus from './event-bus'
 
 export default {
   data() {
@@ -90,10 +91,10 @@ export default {
             )
           })
           .catch(err => {
-            this.$emit('snackbar', err.message)
+            EventBus.$emit('snackbar', err.message)
           })
       } else {
-        this.$emit('snackbar', 'Please check your entries')
+        EventBus.$emit('snackbar', 'Please check your entries')
       }
     },
     reset() {

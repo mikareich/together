@@ -3,22 +3,21 @@
     <v-card outlined class="card">
       <v-list-item>
         <v-list-item-avatar>
-          <v-img :src="post.author.photoURL"></v-img>
+          <v-img :src="author.photoURL"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>{{ post.post.title }}</v-list-item-title>
+          <v-list-item-title>{{ post.title }}</v-list-item-title>
           <v-list-item-subtitle
             >by
-            <a :href="`/account/${post.author.uid}`">{{
-              post.author.username
-            }}</a>
+            <a :href="`/account/${author.uid}`"
+              ><span v-if="author.uid === user.uid">me</span
+              ><span v-else>{{ author.displayName }}</span></a
+            >
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-card-text class="body-2">
-        {{ post.post.message }}
-      </v-card-text>
+      <v-list-item> {{ post.message }}</v-list-item>
       <v-card-actions>
         <v-btn icon color="primary">
           <v-icon>bookmark_border</v-icon>
@@ -42,8 +41,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  props: ['post']
+  props: ['post', 'author'],
+  computed: mapState(['user'])
 }
 </script>
 
