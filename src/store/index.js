@@ -29,7 +29,6 @@ export default new Vuex.Store({
   },
   actions: {
     listenOnPosts({ commit }) {
-      console.log('Hey, I am listening')
       firebase
         .database()
         .ref('/posts/')

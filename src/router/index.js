@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import firebase from 'firebase'
+import EventBus from '@/views/event-bus'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,17 @@ const routes = [
     component: () => import('../views/SignUp.vue')
   },
   {
+    path: '/markedPosts',
+    name: 'MarkedPosts',
+    component: () => import('../views/MarkedPosts.vue'),
+    meta: {
+      requiresAuth: true,
+      displayName: 'Marked posts',
+      displayOnDrawer: true,
+      icon: 'bookmark'
+    }
+  },
+  {
     path: '/settings',
     name: 'Settings',
     component: () => import('../views/Settings.vue'),
@@ -66,17 +78,6 @@ const routes = [
     }
   },
   {
-    path: '/markedPosts',
-    name: 'MarkedPosts',
-    component: () => import('../views/MarkedPosts.vue'),
-    meta: {
-      requiresAuth: true,
-      displayName: 'Marked posts',
-      displayOnDrawer: true,
-      icon: 'bookmark'
-    }
-  },
-  {
     path: '/writePost',
     name: 'WritePost',
     component: () => import('../views/WritePost.vue'),
@@ -96,6 +97,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const currentUser = firebase.auth().currentUser
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  EventBus.$emit('appName', null)
 
   if (currentUser && !requiresAuth) next('/')
   else if (!currentUser && requiresAuth) next('/signin')

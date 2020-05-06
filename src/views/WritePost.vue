@@ -14,9 +14,10 @@
         filled
         prepend-inner-icon="title"
         counter="20"
+        :counter-value="v => (v ? v.trim().length : 0)"
         clearable
         :rules="[rules.required, rules.max20]"
-        v-model="title"
+        v-model.trim="title"
       ></v-text-field>
       <v-textarea
         label="Post"
@@ -30,13 +31,16 @@
         v-model="post"
       ></v-textarea>
     </v-form>
-
+    <v-btn fixed rounded large bottom left color="primary" @click="cancel">
+      <span>Cancel</span>
+      <v-icon right>clear</v-icon>
+    </v-btn>
     <v-btn
       fixed
       rounded
       bottom
       right
-      color="primary"
+      color="secondary"
       large
       :loading="loadMessage"
       :disabled="loadMessage"
@@ -105,6 +109,12 @@ export default {
             EventBus.$emit('snackbar', err.message)
           })
       }
+    },
+    cancel() {
+      EventBus.$emit('dialog', '', 'Sure you want to Cancel')
+      EventBus.$once('dialogResponse', res =>
+        res === 'yes' ? this.$router.back() : 'Stay at side'
+      )
     }
   }
 }

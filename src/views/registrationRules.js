@@ -2,7 +2,8 @@ const email = v =>
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
     v
   ) || 'Email must be valid'
-const required = v => !!v || 'This field is required'
+const required = v =>
+  v ? (v.trim() ? !!v : 'This field is required') : 'This field is required'
 const password = v =>
   new RegExp(
     '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})'
